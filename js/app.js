@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         feedGrid.innerHTML = filteredData.map((item, index) => {
             const colSpan = index === 0 ? 'col-span-2' : '';
             const bgBlur = index === 0 ? '<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl rounded-full -mr-16 -mt-16"></div>' : '';
-            const clickHandler = `handleArticleClick('${item.id}', '${encodeURIComponent(JSON.stringify(item))}')`;
+            const clickHandler = `handleArticleClick('${item.id}')`;
             const delayClass = `delay-${Math.min(index * 100, 1000)}`;
             const timeAgo = formatTimeAgo(item.timestamp);
             const readTime = item.readTime || estimateReadTime(item.headline);
@@ -293,10 +293,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ─── Article Click Handler ───
-    window.handleArticleClick = (articleId, itemData = null) => {
-        if (itemData) {
+    window.handleArticleClick = (articleId) => {
+        // Look up article data from feedCache instead of passing via onclick
+        const articleData = feedCache.find(item => item.id === articleId);
+        if (articleData) {
             try {
-                localStorage.setItem('current_article_data', decodeURIComponent(itemData));
+                localStorage.setItem('current_article_data', JSON.stringify(articleData));
             } catch (e) {
                 console.error("Could not save article data", e);
             }
