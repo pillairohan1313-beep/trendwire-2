@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const READ_COUNT_KEY = 'trendwire_articles_read';
     const POLL_INTERVAL_MS = 60000; // 60s auto-refresh
     let articlesRead = parseInt(localStorage.getItem(READ_COUNT_KEY) || '0');
-    let currentFilter = 'ALL';
+    let currentFilter = 'ARTICLES';
     let feedCache = []; // Cache feed data for filtering
 
     // ─── Category Mapping ───
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function matchesFilter(tag) {
-        if (currentFilter === 'ALL') return true;
+        if (currentFilter === 'ARTICLES') return true;
         const type = getContentType(tag);
         if (currentFilter === 'TOOLS') return type === 'tool';
         if (currentFilter === 'REPORTS') return type === 'report';
@@ -182,9 +182,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (contentType === 'tool') {
                 borderStyle = 'border-[#F05A1A]/30';
-                ctaText = 'Open Tool';
+                ctaText = 'Read Update';
                 ctaIcon = 'open_in_new';
-                typeBadge = `<span class="bg-[#F05A1A]/20 text-[#F05A1A] text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider ml-2">TOOL</span>`;
+                typeBadge = `<span class="bg-[#F05A1A]/20 text-[#F05A1A] text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider ml-2">UPDATE</span>`;
                 accentBorder = 'border-l-2 border-l-[#F05A1A]';
             } else if (contentType === 'report') {
                 borderStyle = 'border-blue-500/30';
@@ -194,12 +194,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 accentBorder = 'border-l-2 border-l-blue-500';
             }
 
+            const isVideo = item.image && item.image.toLowerCase().endsWith('.mp4');
+            const mediaElement = isVideo
+                ? `<video src="${item.image}" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-50"></video>`
+                : `<img src="${item.image}" alt="${escapeHtml(item.headline)}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-50" loading="lazy">`;
+
             return `
                 <div class="${colSpan} relative group cursor-pointer overflow-hidden rounded-xl border ${borderStyle} ${accentBorder} h-full min-h-[300px] animate-fade-up ${delayClass}" style="animation-fill-mode: forwards;" onclick="${clickHandler}">
                 ${bgBlur}
                 
-                <!-- Background Image -->
-                <img src="${item.image}" alt="${escapeHtml(item.headline)}" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-50" loading="lazy">
+                <!-- Background Media -->
+                ${mediaElement}
                 
                 <!-- Dark Gradient Overlay -->
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-80"></div>

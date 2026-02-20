@@ -3,6 +3,8 @@ import urllib.request
 import urllib.error
 import xml.etree.ElementTree as ET
 import json
+import urllib.parse
+import json
 import time
 import random
 import re
@@ -78,6 +80,28 @@ def estimate_read_time(text):
     word_count = len(text.split())
     minutes = max(2, round(word_count / 200))
     return f"{minutes} min read"
+
+
+def fetch_dynamic_media(headline, default_tag):
+    """Fetch a relevant GIF/video from Tenor based on the headline."""
+    try:
+        # Clean headline to just words, take first 4-5 words for better match
+        words = re.findall(r'\b[a-zA-Z0-9]+\b', headline)
+        query = " ".join(words[:4]) if len(words) >= 4 else headline
+        q = urllib.parse.quote_plus(query)
+        url = f"https://g.tenor.com/v1/search?q={q}&key=LIVDSRZULELA&limit=1&media_filter=minimal"
+        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+        with urllib.request.urlopen(req, timeout=1.0) as response:
+            data = json.loads(response.read().decode('utf-8'))
+            if data.get('results'):
+                media = data['results'][0]['media'][0]
+                if 'mp4' in media:
+                    return media['mp4']['url']
+                elif 'gif' in media:
+                    return media['gif']['url']
+    except Exception as e:
+        pass
+    return None
 
 
 def build_content_html(title, description, source_tag, link):
@@ -161,24 +185,29 @@ def fetch_and_parse_feeds():
                 if desc_elem is None:
                     desc_elem = item.find('{http://www.w3.org/2005/Atom}content')
 
-                # Extract image from various sources
-                image_url = None
-                media_content = item.find('{http://search.yahoo.com/mrss/}content')
-                if media_content is not None:
-                    image_url = media_content.attrib.get('url')
-                
+                title_text = title_elem.text if title_elem is not None else "No Title"
+
+                # Try to fetch dynamic media first
+                image_url = fetch_dynamic_media(title_text, feed_config["tag"])
+
                 if not image_url:
-                    enclosure = item.find('enclosure')
-                    if enclosure is not None and enclosure.attrib.get('type', '').startswith('image'):
-                        image_url = enclosure.attrib.get('url')
-                
-                if not image_url and desc_elem is not None and desc_elem.text:
-                    if '<img' in desc_elem.text:
-                        start = desc_elem.text.find('src="')
-                        if start != -1:
-                            start += 5
-                            end = desc_elem.text.find('"', start)
-                            image_url = desc_elem.text[start:end]
+                    # Extract image from various sources
+                    media_content = item.find('{http://search.yahoo.com/mrss/}content')
+                    if media_content is not None:
+                        image_url = media_content.attrib.get('url')
+                    
+                    if not image_url:
+                        enclosure = item.find('enclosure')
+                        if enclosure is not None and enclosure.attrib.get('type', '').startswith('image'):
+                            image_url = enclosure.attrib.get('url')
+                    
+                    if not image_url and desc_elem is not None and desc_elem.text:
+                        if '<img' in desc_elem.text:
+                            start = desc_elem.text.find('src="')
+                            if start != -1:
+                                start += 5
+                                end = desc_elem.text.find('"', start)
+                                image_url = desc_elem.text[start:end]
 
                 if not image_url:
                     image_url = random.choice(FALLBACK_IMAGES.get(feed_config["tag"], FALLBACK_IMAGES["TECH"]))
@@ -194,7 +223,6 @@ def fetch_and_parse_feeds():
                 else:
                     ts = time.time()
 
-                title_text = title_elem.text if title_elem is not None else "No Title"
                 desc_text = desc_elem.text if desc_elem is not None else ""
                 clean_desc = strip_html(desc_text)
 
