@@ -171,6 +171,17 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // --- Phase 3: Source Integrity Backlink ---
+        const sourceContainer = document.getElementById('article-source-container');
+        const sourceLink = document.getElementById('article-source-link');
+
+        if (sourceContainer && sourceLink && data.link) {
+            sourceLink.href = data.link;
+            sourceContainer.classList.remove('hidden');
+        } else if (sourceContainer) {
+            sourceContainer.classList.add('hidden');
+        }
+
         // Related Signals — fetch from API or fallback to FEED_DATA
         const relatedGrid = document.getElementById('related-signals');
         if (relatedGrid) {

@@ -18,13 +18,15 @@ RSS_FEEDS = [
     {"url": "https://techcrunch.com/feed/", "tag": "STARTUPS", "weight": 9},
     {"url": "https://openai.com/blog/rss.xml", "tag": "AI RESEARCH", "weight": 10},
     {"url": "https://feeds.feedburner.com/blogspot/gJZg", "tag": "GOOGLE AI", "weight": 9},
-    {"url": "https://devblogs.microsoft.com/python/feed/", "tag": "DEV", "weight": 8},
+    {"url": "https://www.adexchanger.com/feed/", "tag": "ADTECH", "weight": 9},
+    {"url": "https://searchengineland.com/feed", "tag": "SEO", "weight": 8},
+    {"url": "https://www.socialmediatoday.com/feeds/news/", "tag": "SOCIAL", "weight": 8},
     {"url": "https://www.wired.com/feed/category/business/latest/rss", "tag": "BUSINESS", "weight": 8},
 ]
 
 # Category mapping for filter tabs
 TAG_CATEGORIES = {
-    "TOOLS": ["AI RESEARCH", "GOOGLE AI", "DEV"],
+    "TOOLS": ["AI RESEARCH", "GOOGLE AI", "DEV", "ADTECH", "SEO", "SOCIAL"],
     "REPORTS": ["BUSINESS", "STARTUPS", "TECH"],
 }
 
@@ -259,7 +261,7 @@ class handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Cache-Control', 's-maxage=60, stale-while-revalidate=300')
+        self.send_header('Cache-Control', 's-maxage=30, stale-while-revalidate=60')
         self.end_headers()
         
         news = fetch_and_parse_feeds()
