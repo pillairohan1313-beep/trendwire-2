@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Trendwire Intelligence Dashboard</title>
+    <meta name="description"
+        content="Real-time intelligence engine for AI, digital marketing, and growth signals. Aggregated high-signal updates, tools, and reports." />
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f05a19",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#0b1626",
+                        "surface": "#1a2639",
+                        "border-navy": "#2d3b55",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass-sidebar {
+            background: rgba(11, 22, 38, 0.8);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid #2d3b55;
+        }
+
+        /* Ticker animation */
+        .ticker-wrap {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .ticker-content {
+            display: inline-flex;
+            gap: 1.5rem;
+            animation: ticker 30s linear infinite;
+        }
+
+        @keyframes ticker {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 0.75rem;
+        }
+
+        @media (min-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .bento-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .card-glow:hover {
+            border-color: #f05a19;
+            box-shadow: 0 0 15px rgba(240, 90, 25, 0.1);
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2d3b55;
+            border-radius: 10px;
+        }
+
+        .col-span-2 {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 767px) {
+            .col-span-2 {
+                grid-column: span 1;
+            }
+        }
+
+        /* Mobile sidebar */
+        @media (max-width: 767px) {
+            .glass-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                z-index: 100;
+            }
+
+            .glass-sidebar.sidebar-open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0 !important;
+            }
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-200 antialiased overflow-hidden h-screen flex">
+
+    <!-- Mobile Hamburger Button -->
+    <button id="hamburger-btn"
+        class="md:hidden fixed top-2 left-2 z-[110] bg-surface/90 border border-border-navy p-2 rounded-lg text-primary backdrop-blur-md">
+        <span class="material-icons">menu</span>
+    </button>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="glass-sidebar w-16 md:w-20 flex flex-col items-center py-6 z-50 hidden md:flex">
+        <div class="mb-10 text-primary">
+            <span class="material-icons text-3xl">bolt</span>
+        </div>
+        <nav class="flex flex-col gap-8 flex-1">
+            <button data-nav="dashboard" class="text-primary p-2 rounded-lg bg-primary/10" title="Dashboard">
+                <span class="material-icons">dashboard</span>
+            </button>
+            <button data-nav="sensors" class="text-slate-400 p-2 hover:text-white transition-colors" title="Sensors">
+                <span class="material-icons">sensors</span>
+            </button>
+            <div class="relative">
+                <button data-nav="insights" class="text-slate-400 p-2 hover:text-white transition-colors"
+                    title="Insights (Pro)">
+                    <span class="material-icons">insights</span>
+                </button>
+                <span
+                    class="absolute -top-1 -right-1 bg-primary text-[8px] font-bold px-1 rounded text-white">PRO</span>
+            </div>
+            <button data-nav="storage" class="text-slate-400 p-2 hover:text-white transition-colors" title="Vault">
+                <span class="material-icons">storage</span>
+            </button>
+        </nav>
+        <div class="mt-auto">
+            <div
+                class="w-8 h-8 rounded-full bg-surface border border-border-navy flex items-center justify-center overflow-hidden">
+                <span class="material-icons text-slate-400 text-sm">person</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden relative main-content">
+        <!-- Scrolling Ticker -->
+        <header class="bg-surface/50 border-b border-border-navy h-10 flex items-center overflow-hidden shrink-0">
+            <div class="flex items-center px-4 bg-background-dark border-r border-border-navy z-10 h-full shrink-0">
+                <span class="text-[10px] font-bold tracking-widest text-primary uppercase hidden sm:inline">LIVE
+                    SENTIMENT</span>
+                <span class="text-[10px] font-bold tracking-widest text-primary uppercase sm:hidden">LIVE</span>
+            </div>
+            <div class="ticker-wrap flex-1 flex items-center px-4">
+                <div class="ticker-content">
+                    <!-- Duplicated for seamless loop -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono text-slate-400">BTC/USD</span>
+                        <span class="text-[10px] font-mono text-green-400">+4.2%</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono text-slate-400">META AD COST</span>
+                        <span class="text-[10px] font-mono text-red-400">-1.8%</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono text-slate-400">AI AGENT ADOPTION</span>
+                        <span class="text-[10px] font-mono text-green-400">+12.4%</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono text-slate-400">TIKTOK CPM</span>
+                        <span class="text-[10px] font-mono text-slate-300">0.0%</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono text-slate-400">GOOGLE ADS CPC</span>
+                        <span class="text-[10px] font-mono text-green-400">+2.1%</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono text-slate-400">EMAIL OPEN RATE</span>
+                        <span class="text-[10px] font-mono text-red-400">-0.9%</span>
+                    </div>
+                    <!-- Duplicate for seamless scroll -->
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono text-slate-400">BTC/USD</span>
+                        <span class="text-[10px] font-mono text-green-400">+4.2%</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono text-slate-400">META AD COST</span>
+                        <span class="text-[10px] font-mono text-red-400">-1.8%</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono text-slate-400">AI AGENT ADOPTION</span>
+                        <span class="text-[10px] font-mono text-green-400">+12.4%</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono text-slate-400">TIKTOK CPM</span>
+                        <span class="text-[10px] font-mono text-slate-300">0.0%</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono text-slate-400">GOOGLE ADS CPC</span>
+                        <span class="text-[10px] font-mono text-green-400">+2.1%</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-mono text-slate-400">EMAIL OPEN RATE</span>
+                        <span class="text-[10px] font-mono text-red-400">-0.9%</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Body -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-6">
+            <!-- Title & Filters -->
+            <div class="flex flex-col gap-4">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h1 class="text-xl font-bold tracking-tight text-white uppercase">Intelligence Feed</h1>
+                        <p class="text-[10px] text-slate-500 font-mono">UPDATED 2m AGO • 144 SIGNALS DETECTED</p>
+                    </div>
+                    <button id="tune-btn" class="bg-primary/10 text-primary border border-primary/20 p-2 rounded"
+                        title="Filter Settings">
+                        <span class="material-icons text-sm">tune</span>
+                    </button>
+                </div>
+                <!-- Segmented Controller -->
+                <div class="flex p-1 bg-surface border border-border-navy rounded-lg w-full max-w-md">
+                    <button data-filter="ALL"
+                        class="flex-1 py-1.5 text-[11px] font-bold tracking-wider rounded bg-border-navy text-white">ALL</button>
+                    <button data-filter="TOOLS"
+                        class="flex-1 py-1.5 text-[11px] font-bold tracking-wider text-slate-500">TOOLS</button>
+                    <button data-filter="REPORTS"
+                        class="flex-1 py-1.5 text-[11px] font-bold tracking-wider text-slate-500">REPORTS</button>
+                </div>
+            </div>
+            <!-- Bento Grid -->
+            <div class="bento-grid">
+                <!-- JS Injects Here -->
+            </div>
+            <!-- Bottom Spacer -->
+            <div class="h-10"></div>
+        </div>
+    </main>
+
+    <!-- Paywall Overlay -->
+    <div class="fixed inset-0 bg-background-dark/80 backdrop-blur-sm z-50 hidden flex items-center justify-center"
+        id="paywall-overlay">
+        <div
+            class="bg-surface border border-primary/30 rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl shadow-primary/10 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-primary"></div>
+            <div class="text-center">
+                <div
+                    class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6 text-primary">
+                    <span class="material-icons text-4xl">lock</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-2">Limit Reached</h3>
+                <p class="text-slate-400 mb-8">Traffic is vanity. Insight is revenue. <br />Unlock the full engine for
+                    unlimited access.</p>
+                <button id="unlock-full-access"
+                    class="w-full bg-primary hover:bg-orange-600 text-white font-bold py-3 rounded transition-all uppercase tracking-widest text-sm shadow-lg hover:shadow-primary/40 mb-4">
+                    Unlock Full Access ($5/mo)
+                </button>
+                <button
+                    class="text-xs text-slate-500 hover:text-white underline decoration-slate-600 hover:decoration-white underline-offset-4"
+                    id="close-demo-paywall">
+                    Continue as Free User (Demo Only)
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trendwire Intelligence Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f05a19",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#0b1626",
+                        "surface": "#1a2639",
+                        "border-navy": "#2d3b55",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass-sidebar {
+            background: rgba(11, 22, 38, 0.8);
+            backdrop-filter: blur(12px);
+            border-right: 1px solid #2d3b55;
+        }
+        .ticker-wrap {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .ticker-content {
+            display: inline-block;
+            animation: none; /* Layout only as requested */
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+        }
+        .card-glow:hover {
+            border-color: #f05a19;
+            box-shadow: 0 0 15px rgba(240, 90, 25, 0.1);
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2d3b55;
+            border-radius: 10px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-200 antialiased overflow-hidden h-screen flex">
+<!-- Sidebar (Phone View Fixed Left) -->
+<aside class="glass-sidebar w-16 md:w-20 flex flex-col items-center py-6 z-50">
+<div class="mb-10 text-primary">
+<span class="material-icons text-3xl">bolt</span>
+</div>
+<nav class="flex flex-col gap-8 flex-1">
+<button class="text-primary p-2 rounded-lg bg-primary/10">
+<span class="material-icons">dashboard</span>
+</button>
+<button class="text-slate-400 p-2 hover:text-white transition-colors">
+<span class="material-icons">sensors</span>
+</button>
+<div class="relative">
+<button class="text-slate-400 p-2 hover:text-white transition-colors">
+<span class="material-icons">insights</span>
+</button>
+<span class="absolute -top-1 -right-1 bg-primary text-[8px] font-bold px-1 rounded text-white">PRO</span>
+</div>
+<button class="text-slate-400 p-2 hover:text-white transition-colors">
+<span class="material-icons">storage</span>
+</button>
+</nav>
+<div class="mt-auto">
+<div class="w-8 h-8 rounded-full bg-surface border border-border-navy flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="User profile avatar silhouette" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAHoAd14T2mZ39XCqFDJgEWZglPCTP36mdPifxsoUbjbtHx_q-c6qxpVTB9NS27NJ3CSGs8l3XGecdRv68e7xcEI9pspXBb1PB-g7uoD7SDdmNbAdhjWSg9Zix4GuS_f-Fomzh7X1sx50zTVCk0AB5Sf3o92w3w1yLiB1C6UfrhWR_-nsg2wAFo2OYWxv2pLqLM8eiSlTzFAr_w03VwDKgNkW51hODHD52Hv5soEq3r3tOdMQAWUjUEETnk3YQST5gdZ5_2te_4w_P-"/>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full overflow-hidden">
+<!-- Scrolling Ticker -->
+<header class="bg-surface/50 border-b border-border-navy h-10 flex items-center overflow-hidden shrink-0">
+<div class="flex items-center px-4 bg-background-dark border-r border-border-navy z-10 h-full">
+<span class="text-[10px] font-bold tracking-widest text-primary uppercase">LIVE SENTIMENT</span>
+</div>
+<div class="ticker-wrap flex-1 flex items-center gap-6 px-4">
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-mono text-slate-400">BTC/USD</span>
+<span class="text-[10px] font-mono text-green-400">+4.2%</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-mono text-slate-400">META AD COST</span>
+<span class="text-[10px] font-mono text-red-400">-1.8%</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-mono text-slate-400">AI AGENT ADOPTION</span>
+<span class="text-[10px] font-mono text-green-400">+12.4%</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-mono text-slate-400">TIKTOK CPM</span>
+<span class="text-[10px] font-mono text-slate-300">0.0%</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[10px] font-mono text-slate-400">GOOGLE SEARCH VOLUME</span>
+<span class="text-[10px] font-mono text-green-400">+2.1%</span>
+</div>
+</div>
+</header>
+<!-- Content Body -->
+<div class="flex-1 overflow-y-auto p-4 space-y-6">
+<!-- Title & Filters -->
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-end">
+<div>
+<h1 class="text-xl font-bold tracking-tight text-white uppercase">Intelligence Feed</h1>
+<p class="text-[10px] text-slate-500 font-mono">UPDATED 2m AGO • 144 SIGNALS DETECTED</p>
+</div>
+<button class="bg-primary/10 text-primary border border-primary/20 p-2 rounded">
+<span class="material-icons text-sm">tune</span>
+</button>
+</div>
+<!-- Segmented Controller -->
+<div class="flex p-1 bg-surface border border-border-navy rounded-lg w-full">
+<button class="flex-1 py-1.5 text-[11px] font-bold tracking-wider rounded bg-border-navy text-white">ALL</button>
+<button class="flex-1 py-1.5 text-[11px] font-bold tracking-wider text-slate-500">TOOLS</button>
+<button class="flex-1 py-1.5 text-[11px] font-bold tracking-wider text-slate-500">REPORTS</button>
+</div>
+</div>
+<!-- Bento Grid -->
+<div class="bento-grid">
+<!-- Large Card -->
+<div class="col-span-2 bg-surface border border-border-navy rounded-xl p-4 space-y-4 card-glow relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl rounded-full -mr-16 -mt-16"></div>
+<div class="flex justify-between items-start">
+<span class="bg-primary text-white text-[9px] font-bold px-2 py-0.5 rounded tracking-tighter uppercase">META ADS</span>
+<div class="flex flex-col items-end">
+<span class="text-[9px] text-slate-500 font-mono">IMPACT</span>
+<span class="text-2xl font-mono font-bold text-primary">9.2</span>
+</div>
+</div>
+<div class="space-y-2">
+<h2 class="text-lg font-bold leading-tight text-white">Algorithm shift detected in Meta Advantage+ placements.</h2>
+<p class="text-xs text-slate-400 leading-relaxed">Early indicators suggest a 22% efficiency increase in creative-led campaigns following the V14 backend update.</p>
+</div>
+<div class="pt-2 flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-slate-700 flex items-center justify-center text-[8px] font-bold">JD</div>
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-slate-600 flex items-center justify-center text-[8px] font-bold">MK</div>
+</div>
+<button class="bg-primary hover:bg-orange-600 text-white text-[10px] font-bold px-4 py-2 rounded-md transition-colors uppercase tracking-widest">Read Brief</button>
+</div>
+</div>
+<!-- Small Card 1 -->
+<div class="bg-surface border border-border-navy rounded-xl p-3 space-y-3 card-glow">
+<div class="flex justify-between items-start">
+<span class="bg-slate-700 text-slate-300 text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">X.COM</span>
+<span class="text-lg font-mono font-bold text-white">7.4</span>
+</div>
+<h3 class="text-sm font-bold leading-snug">Grok integration spikes search intent.</h3>
+<button class="w-full border border-border-navy hover:bg-border-navy text-slate-300 text-[9px] font-bold py-2 rounded transition-colors uppercase">Details</button>
+</div>
+<!-- Small Card 2 -->
+<div class="bg-surface border border-border-navy rounded-xl p-3 space-y-3 card-glow">
+<div class="flex justify-between items-start">
+<span class="bg-slate-700 text-slate-300 text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">AI TOOLS</span>
+<span class="text-lg font-mono font-bold text-white">8.8</span>
+</div>
+<h3 class="text-sm font-bold leading-snug">Jasper.ai workflow automation leak.</h3>
+<button class="w-full border border-border-navy hover:bg-border-navy text-slate-300 text-[9px] font-bold py-2 rounded transition-colors uppercase">Details</button>
+</div>
+<!-- Medium Image Card -->
+<div class="col-span-2 bg-surface border border-border-navy rounded-xl overflow-hidden card-glow group">
+<div class="h-32 w-full relative">
+<img class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500" data-alt="Abstract data visualization with glowing orange lines" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxLI9uOiV-zo3rGbSWnvFVJ8fVvwigqrbb2LEslf-1Lb2i0OIhsNQGAmLYHAI_dWIO6OeRfPwBpQMPJ70bnk5Y6ux7rw_SvH3eI5Q3PYStEiAOsQxmlaaFSbnJbAG-uik_ePEiY8hwNIiGYF8yQ6T2dKqAIti2YAp4ElIggD6-G1vBy1It9JcLKgyFxCADTrFA_wvvD7tSC_pIW8PslNCI2NZriUJWUW7li7edJLZ2Wn5q2uEZd8Dvs2FZ4EPrDH-NBxWPEihGYvbw"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface to-transparent"></div>
+<div class="absolute bottom-3 left-3 right-3 flex justify-between items-end">
+<div>
+<span class="bg-primary/20 text-primary text-[8px] font-bold px-2 py-0.5 rounded-full border border-primary/30 uppercase mb-1 inline-block">Q3 REPORT</span>
+<h3 class="text-sm font-bold text-white">Retail Media Spend Benchmark</h3>
+</div>
+<span class="text-xl font-mono font-bold text-white">6.1</span>
+</div>
+</div>
+<div class="p-3">
+<p class="text-[10px] text-slate-400 mb-3">Comparison of Amazon vs Walmart Connect ROAS performance across 500+ accounts.</p>
+<button class="w-full bg-border-navy text-white text-[10px] font-bold py-2 rounded-md uppercase tracking-widest">Download PDF</button>
+</div>
+</div>
+<!-- Small Card 3 -->
+<div class="bg-surface border border-border-navy rounded-xl p-3 space-y-3 card-glow">
+<div class="flex justify-between items-start">
+<span class="bg-slate-700 text-slate-300 text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">TIKTOK</span>
+<span class="text-lg font-mono font-bold text-white">5.2</span>
+</div>
+<h3 class="text-sm font-bold leading-snug">New "Shop" tab layout test.</h3>
+<button class="w-full border border-border-navy hover:bg-border-navy text-slate-300 text-[9px] font-bold py-2 rounded transition-colors uppercase">Details</button>
+</div>
+<!-- Small Card 4 -->
+<div class="bg-surface border border-border-navy rounded-xl p-3 space-y-3 card-glow">
+<div class="flex justify-between items-start">
+<span class="bg-slate-700 text-slate-300 text-[8px] font-bold px-1.5 py-0.5 rounded uppercase">SEO</span>
+<span class="text-lg font-mono font-bold text-white">9.5</span>
+</div>
+<h3 class="text-sm font-bold leading-snug">Google Core update confirmed.</h3>
+<button class="w-full border border-border-navy hover:bg-border-navy text-slate-300 text-[9px] font-bold py-2 rounded transition-colors uppercase">Details</button>
+</div>
+</div>
+<!-- Bottom Spacer for Tab Bar Feel -->
+<div class="h-10"></div>
+</div>
+<!-- Mobile Bottom Nav Simulation -->
+<footer class="md:hidden glass-sidebar h-16 flex items-center justify-around px-6 border-t border-border-navy shrink-0">
+<span class="material-icons text-primary">analytics</span>
+<span class="material-icons text-slate-500">search</span>
+<span class="material-icons text-slate-500">notifications</span>
+<span class="material-icons text-slate-500">person</span>
+</footer>
+</main>
+</body></html>

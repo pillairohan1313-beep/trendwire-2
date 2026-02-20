@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Trendwire Article Reader</title>
+    <meta name="description" content="Intelligence brief — powered by Trendwire." />
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f05a19",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#0b1626",
+                        "surface": "#1a2639",
+                        "border-muted": "#2d3b55",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .glass {
+            background: rgba(26, 38, 57, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .custom-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(45, 59, 85, 0.1) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(45, 59, 85, 0.1) 1px, transparent 1px);
+        }
+
+        /* Mobile sidebar */
+        @media (max-width: 767px) {
+            .article-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                position: fixed;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                z-index: 100;
+            }
+
+            .article-sidebar.sidebar-open {
+                transform: translateX(0);
+            }
+
+            .article-main {
+                margin-left: 0 !important;
+            }
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-200 min-h-screen flex selection:bg-primary/30 selection:text-primary">
+
+    <!-- Mobile Hamburger Button -->
+    <button id="hamburger-btn-article"
+        class="md:hidden fixed top-2 left-2 z-[110] bg-surface/90 border border-border-muted p-2 rounded-lg text-primary backdrop-blur-md">
+        <span class="material-icons">menu</span>
+    </button>
+
+    <!-- Left Sidebar -->
+    <aside id="sidebar-article"
+        class="article-sidebar fixed left-0 top-0 bottom-0 w-16 hidden md:flex flex-col items-center py-8 border-r border-border-muted bg-background-dark/80 backdrop-blur-md z-50">
+        <div class="mb-12">
+            <a href="/" class="material-icons text-primary text-3xl">bolt</a>
+        </div>
+        <nav class="flex flex-col gap-8">
+            <a href="/" class="text-slate-400 hover:text-primary transition-colors" title="Dashboard">
+                <span class="material-icons">home</span>
+            </a>
+            <button class="text-slate-400 hover:text-primary transition-colors" title="Search"
+                onclick="document.getElementById('toast-notification')?.remove(); const t=document.createElement('div');t.id='toast-notification';t.className='fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#1a2639] border border-[#2d3b55] text-white text-sm px-6 py-3 rounded-lg shadow-2xl z-[200] font-mono tracking-wide';t.textContent='Search coming in v1.1';document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity 0.3s';setTimeout(()=>t.remove(),300)},2500)">
+                <span class="material-icons">search</span>
+            </button>
+            <button class="text-slate-400 hover:text-primary transition-colors" title="Vault"
+                onclick="document.getElementById('toast-notification')?.remove(); const t=document.createElement('div');t.id='toast-notification';t.className='fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#1a2639] border border-[#2d3b55] text-white text-sm px-6 py-3 rounded-lg shadow-2xl z-[200] font-mono tracking-wide';t.textContent='Vault: See saved articles';document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity 0.3s';setTimeout(()=>t.remove(),300)},2500)">
+                <span class="material-icons">bookmark</span>
+            </button>
+            <button class="text-slate-400 hover:text-primary transition-colors" title="Insights (Pro)"
+                onclick="document.getElementById('toast-notification')?.remove(); const t=document.createElement('div');t.id='toast-notification';t.className='fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#1a2639] border border-[#2d3b55] text-white text-sm px-6 py-3 rounded-lg shadow-2xl z-[200] font-mono tracking-wide';t.textContent='Pro Insights — Unlock with Pro subscription';document.body.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity 0.3s';setTimeout(()=>t.remove(),300)},2500)">
+                <span class="material-icons">insights</span>
+            </button>
+        </nav>
+        <div class="mt-auto">
+            <button
+                class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
+                <span class="material-icons text-primary text-sm">person</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="article-main ml-0 md:ml-16 flex-1 flex flex-col relative custom-grid pb-24">
+        <!-- Top Status Bar -->
+        <div
+            class="h-12 w-full flex items-center justify-between px-4 md:px-6 border-b border-border-muted/50 bg-background-dark/40">
+            <span class="font-mono text-[10px] tracking-widest text-slate-500 uppercase">Trendwire Terminal
+                v4.2.0</span>
+            <div class="flex items-center gap-4">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                <span class="font-mono text-[10px] text-slate-500">LIVE FEED ACTIVE</span>
+            </div>
+        </div>
+
+        <!-- Article Container -->
+        <article class="max-w-2xl mx-auto w-full px-4 md:px-6 pt-8 md:pt-12">
+            <!-- Metadata Header -->
+            <div class="flex flex-wrap items-center gap-3 md:gap-4 mb-6 md:mb-8">
+                <div class="bg-primary/10 border border-primary/40 px-3 py-1 rounded flex items-center gap-2">
+                    <span class="font-mono font-bold text-primary text-lg" id="impact-score">9.2</span>
+                    <span
+                        class="font-mono text-[10px] text-primary/80 uppercase tracking-tighter leading-none">Impact<br />Score</span>
+                </div>
+                <div class="h-8 w-[1px] bg-border-muted hidden sm:block"></div>
+                <div class="font-mono text-xs text-slate-400 tracking-wider" id="article-date">
+                    Loading...
+                </div>
+                <div
+                    class="ml-auto flex items-center gap-2 px-2 py-1 rounded bg-slate-800/50 border border-border-muted">
+                    <span class="material-icons text-[14px] text-slate-400">visibility</span>
+                    <span class="font-mono text-[10px] text-slate-400" id="view-count">—</span>
+                </div>
+            </div>
+
+            <!-- Headline -->
+            <h1 class="text-2xl sm:text-4xl md:text-5xl font-extrabold text-white leading-[1.1] mb-6 md:mb-8 tracking-tight"
+                id="article-headline">
+                Loading...
+            </h1>
+
+            <!-- Hero Image -->
+            <div
+                class="relative w-full aspect-video rounded-xl overflow-hidden border border-border-muted mb-8 md:mb-10 group">
+                <img id="article-image" alt="Article Image"
+                    class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="" />
+                <div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent"></div>
+                <div class="absolute bottom-4 left-4 flex items-center gap-2">
+                    <span class="bg-primary px-2 py-1 text-[10px] font-bold text-white uppercase rounded"
+                        id="article-tag">Signal</span>
+                    <span class="text-white/60 text-[10px] font-mono" id="signal-id">SIGNAL_ID: ...</span>
+                </div>
+            </div>
+
+            <!-- Body Text Container -->
+            <div id="article-content"
+                class="prose prose-invert max-w-none space-y-6 text-slate-300 leading-relaxed text-lg">
+                <div class="flex items-center justify-center py-10">
+                    <div class="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                    <span class="ml-3 text-slate-400 font-mono text-sm">Loading intelligence data...</span>
+                </div>
+            </div>
+
+            <!-- Related Signals -->
+            <section class="mt-16 md:mt-20 mb-12">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-sm font-mono font-bold text-slate-400 uppercase tracking-widest">Related Signals
+                    </h2>
+                    <div class="h-[1px] flex-1 mx-4 bg-border-muted"></div>
+                </div>
+                <div id="related-signals" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- JS Injects Here -->
+                </div>
+            </section>
+        </article>
+
+        <!-- Sticky Bottom Action Bar -->
+        <div class="fixed bottom-0 left-0 md:left-16 right-0 p-4 z-40 pointer-events-none">
+            <div
+                class="max-w-xl mx-auto glass border border-white/10 rounded-xl p-2 flex items-center gap-2 pointer-events-auto shadow-2xl">
+                <button id="btn-share-brief"
+                    class="flex-1 bg-primary hover:bg-primary/90 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all">
+                    <span class="material-icons text-sm">ios_share</span>
+                    <span class="text-xs uppercase tracking-widest">Share Brief</span>
+                </button>
+                <button id="btn-save-vault"
+                    class="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-3 px-4 rounded-lg flex items-center justify-center gap-2 border border-white/10 transition-all">
+                    <span class="material-icons text-sm">bookmark_border</span>
+                    <span class="text-xs uppercase tracking-widest">Save to Vault</span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Side Decoration (Terminal Style) — Desktop Only -->
+    <div
+        class="hidden lg:flex fixed right-0 top-0 bottom-0 w-64 border-l border-border-muted bg-background-dark/20 p-6 flex-col gap-6 overflow-y-auto">
+        <div>
+            <h5 class="text-[10px] font-mono font-bold text-slate-500 uppercase mb-4 tracking-widest">System Latency
+            </h5>
+            <div class="h-16 w-full bg-slate-800/50 rounded border border-border-muted relative overflow-hidden">
+                <div class="absolute bottom-0 left-0 right-0 h-8 flex items-end gap-[2px] px-2">
+                    <div class="w-2 bg-primary/40 h-[20%]"></div>
+                    <div class="w-2 bg-primary/40 h-[40%]"></div>
+                    <div class="w-2 bg-primary/40 h-[30%]"></div>
+                    <div class="w-2 bg-primary/40 h-[60%]"></div>
+                    <div class="w-2 bg-primary/40 h-[80%]"></div>
+                    <div class="w-2 bg-primary/40 h-[50%]"></div>
+                    <div class="w-2 bg-primary/40 h-[90%]"></div>
+                    <div class="w-2 bg-primary/40 h-[70%]"></div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <h5 class="text-[10px] font-mono font-bold text-slate-500 uppercase mb-4 tracking-widest">Raw Log Stream
+            </h5>
+            <div id="log-stream" class="font-mono text-[9px] text-slate-500 space-y-1">
+                <p><span class="text-primary">[OK]</span> AWAITING_SIGNAL...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Paywall Overlay -->
+    <div id="paywall-overlay"
+        class="fixed inset-0 bg-background-dark/95 z-[100] hidden flex items-center justify-center p-6">
+        <div
+            class="glass border border-primary/30 rounded-2xl p-8 max-w-sm w-full text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-1 bg-primary shadow-[0_0_10px_#f05a19]"></div>
+            <div
+                class="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6 text-primary border border-primary/20">
+                <span class="material-icons text-5xl">lock</span>
+            </div>
+            <h2 class="text-2xl font-bold text-white mb-2 tracking-tight">Intelligence Capacity Reached</h2>
+            <p class="text-slate-400 text-sm mb-8 leading-relaxed">
+                Traffic is vanity. Insight is revenue.<br />Unlock the full engine for unlimited access.
+            </p>
+            <button id="btn-unlock-pro"
+                class="w-full bg-primary hover:bg-orange-600 text-white font-bold py-4 rounded-xl transition-all uppercase tracking-widest text-sm shadow-lg hover:shadow-primary/40 mb-4 flex items-center justify-center gap-2">
+                <span>Initialize Pro Protocol</span>
+                <span class="bg-white/20 px-2 py-0.5 rounded text-[10px]">$5/mo</span>
+            </button>
+            <p class="text-[10px] text-slate-500 uppercase tracking-widest mt-4">
+                Secure Transaction via Stripe
+            </p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/article.js"></script>
+</body>
+
+</html>

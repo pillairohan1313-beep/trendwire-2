@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Trendwire Pro Subscription</title>
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f05a19",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#0B1626",
+                        "card-dark": "#1A2639",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .grid-bg {
+            background-image: linear-gradient(to right, rgba(240, 90, 25, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(240, 90, 25, 0.05) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .glass-morphism {
+            background: rgba(26, 38, 57, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(240, 90, 25, 0.2);
+        }
+
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: rgba(240, 90, 25, 0.1);
+            position: absolute;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen selection:bg-primary selection:text-white">
+    <div class="fixed inset-0 grid-bg pointer-events-none"></div>
+    <div class="relative flex flex-col min-h-screen w-full overflow-x-hidden">
+        <!-- Top Navigation -->
+        <header class="w-full max-w-5xl mx-auto px-6 py-6 flex items-center justify-between border-b border-primary/10">
+            <div class="flex items-center gap-3">
+                <div class="text-primary">
+                    <span class="material-symbols-outlined text-3xl font-bold">bolt</span>
+                </div>
+                <h2 class="text-xl font-bold tracking-tight uppercase">Trendwire</h2>
+            </div>
+            <a class="group flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-primary transition-colors uppercase tracking-widest"
+                href="/">
+                <span class="material-symbols-outlined text-lg">dashboard</span>
+                Back to Dashboard
+            </a>
+        </header>
+        <main class="flex-1 w-full max-w-4xl mx-auto px-6 py-12 flex flex-col items-center">
+            <!-- Hero Section -->
+            <div class="text-center mb-12">
+                <div
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded border border-primary/30 bg-primary/5 mb-6">
+                    <span class="text-[10px] font-bold tracking-[0.2em] text-primary uppercase">Protocol:
+                        PRO_ACCESS</span>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight mb-4">
+                    Unlock the Full Intelligence Engine
+                </h1>
+                <p class="text-slate-400 text-lg max-w-xl mx-auto font-light">
+                    Elevate your market positioning with real-time signal analysis and institutional-grade data streams.
+                </p>
+            </div>
+            <!-- Main Pricing Card -->
+            <div
+                class="w-full glass-morphism rounded-xl p-8 md:p-12 relative overflow-hidden group shadow-2xl shadow-primary/5">
+                <div class="scanline"></div>
+                <div class="flex flex-col md:flex-row gap-12 items-start">
+                    <!-- Left: Pricing & CTA -->
+                    <div class="flex-1 w-full">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-xs font-bold text-primary tracking-widest uppercase">Standard
+                                Allocation</span>
+                            <span class="px-2 py-0.5 rounded text-[10px] bg-primary text-white font-bold">ACTIVE
+                                SIGNAL</span>
+                        </div>
+                        <div class="flex items-baseline gap-2 mb-8">
+                            <span class="text-6xl font-bold text-primary tracking-tighter">$5</span>
+                            <span class="text-xl text-slate-400 font-medium">/mo</span>
+                        </div>
+                        <div class="space-y-4 mb-8">
+                            <div class="flex items-center gap-4 group/item">
+                                <span class="material-symbols-outlined text-primary font-bold">check_circle</span>
+                                <span class="text-slate-200 font-medium tracking-wide uppercase text-sm">Unlimited
+                                    signal access</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="material-symbols-outlined text-primary font-bold">check_circle</span>
+                                <span class="text-slate-200 font-medium tracking-wide uppercase text-sm">Deep-dive
+                                    technical reports</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="material-symbols-outlined text-primary font-bold">check_circle</span>
+                                <span class="text-slate-200 font-medium tracking-wide uppercase text-sm">Real-time
+                                    terminal alerts</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="material-symbols-outlined text-primary font-bold">check_circle</span>
+                                <span class="text-slate-200 font-medium tracking-wide uppercase text-sm">Priority API
+                                    endpoint access</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="material-symbols-outlined text-primary font-bold">check_circle</span>
+                                <span class="text-slate-200 font-medium tracking-wide uppercase text-sm">Secure Vault
+                                    architecture</span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <span class="material-symbols-outlined text-primary font-bold">check_circle</span>
+                                <span class="text-slate-200 font-medium tracking-wide uppercase text-sm">Weekly market
+                                    digests</span>
+                            </div>
+                        </div>
+                        <button
+                            class="w-full py-4 bg-primary hover:bg-primary/90 text-white font-bold text-lg rounded shadow-lg shadow-primary/20 transition-all active:scale-[0.98] uppercase tracking-widest flex items-center justify-center gap-3">
+                            Initialize Pro Protocol
+                            <span class="material-symbols-outlined">arrow_forward</span>
+                        </button>
+                    </div>
+                    <!-- Right: Visualization/Extra Info -->
+                    <div class="w-full md:w-72 flex flex-col gap-6">
+                        <div class="p-4 rounded border border-white/5 bg-white/5 space-y-3">
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter">Network Status
+                            </p>
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                                <span class="text-xs text-slate-300 font-mono">NODES_ONLINE: 402/402</span>
+                            </div>
+                            <div class="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-primary w-3/4"></div>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded border border-white/5 bg-white/5">
+                            <p class="text-[10px] font-bold text-slate-500 uppercase tracking-tighter mb-2">Recent
+                                Execution</p>
+                            <div class="font-mono text-[10px] text-primary/70 leading-relaxed">
+                                &gt; INIT_HANDSHAKE... OK<br />
+                                &gt; FETCH_MARKET_DATA... OK<br />
+                                &gt; ANALYZING_TRENDS... 98%<br />
+                                &gt; SIGNAL_LOCKED
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Social Proof -->
+            <div class="mt-16 w-full text-center">
+                <p class="text-xs font-bold text-slate-500 tracking-[0.3em] uppercase mb-8">Trusted by 2,400+ Operators
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <span
+                        class="px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-[10px] font-bold text-slate-300 tracking-widest uppercase">Arbiter</span>
+                    <span
+                        class="px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-[10px] font-bold text-slate-300 tracking-widest uppercase">Sentinel</span>
+                    <span
+                        class="px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-[10px] font-bold text-slate-300 tracking-widest uppercase">Oracle</span>
+                    <span
+                        class="px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-[10px] font-bold text-slate-300 tracking-widest uppercase">Architect</span>
+                </div>
+            </div>
+            <!-- FAQ Section -->
+            <section class="mt-24 w-full max-w-2xl mx-auto">
+                <h3 class="text-xl font-bold text-white text-center mb-8 uppercase tracking-widest">System Inquiries
+                </h3>
+                <div class="space-y-4">
+                    <details class="group border border-white/10 rounded overflow-hidden bg-white/5">
+                        <summary
+                            class="list-none p-4 flex items-center justify-between cursor-pointer hover:bg-white/10 transition-colors">
+                            <span class="text-sm font-bold uppercase tracking-wide">01 // Payment Protocols</span>
+                            <span
+                                class="material-symbols-outlined text-slate-500 group-open:rotate-180 transition-transform">expand_more</span>
+                        </summary>
+                        <div class="p-4 border-t border-white/5 text-sm text-slate-400 leading-relaxed font-light">
+                            We accept all major credit protocols and encrypted currency assets. Billing cycles are
+                            initiated every 30 terrestrial days.
+                        </div>
+                    </details>
+                    <details class="group border border-white/10 rounded overflow-hidden bg-white/5">
+                        <summary
+                            class="list-none p-4 flex items-center justify-between cursor-pointer hover:bg-white/10 transition-colors">
+                            <span class="text-sm font-bold uppercase tracking-wide">02 // API Rate Limits</span>
+                            <span
+                                class="material-symbols-outlined text-slate-500 group-open:rotate-180 transition-transform">expand_more</span>
+                        </summary>
+                        <div class="p-4 border-t border-white/5 text-sm text-slate-400 leading-relaxed font-light">
+                            Pro Operators receive priority bandwidth with a ceiling of 10,000 requests per minute.
+                            Custom enterprise uplinks are available for volume users.
+                        </div>
+                    </details>
+                    <details class="group border border-white/10 rounded overflow-hidden bg-white/5">
+                        <summary
+                            class="list-none p-4 flex items-center justify-between cursor-pointer hover:bg-white/10 transition-colors">
+                            <span class="text-sm font-bold uppercase tracking-wide">03 // Data Source Integrity</span>
+                            <span
+                                class="material-symbols-outlined text-slate-500 group-open:rotate-180 transition-transform">expand_more</span>
+                        </summary>
+                        <div class="p-4 border-t border-white/5 text-sm text-slate-400 leading-relaxed font-light">
+                            Our intelligence engine aggregates from 150+ decentralized and institutional feeds,
+                            processed through our proprietary verification layer.
+                        </div>
+                    </details>
+                </div>
+            </section>
+        </main>
+        <!-- Footer -->
+        <footer
+            class="w-full max-w-5xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-white/5 mt-12">
+            <div class="flex items-center gap-4">
+                <span class="text-[10px] font-mono text-slate-600 uppercase tracking-tighter">System Version</span>
+                <span class="text-[10px] font-mono text-primary/60">v4.2.0-STABLE</span>
+            </div>
+            <div class="flex gap-8">
+                <a class="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors"
+                    href="#">Privacy_Log</a>
+                <a class="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors"
+                    href="#">Terms_of_Service</a>
+                <a class="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors"
+                    href="#">Network_Status</a>
+            </div>
+            <p class="text-[10px] font-mono text-slate-600">© 2026 TRENDWIRE_LABS</p>
+        </footer>
+    </div>
+</body>
+
+</html>

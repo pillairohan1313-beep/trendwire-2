@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Trendwire | 404 Signal Lost</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;family=JetBrains+Mono:wght@700&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#f05a19",
+            "background-light": "#f8f6f6",
+            "background-dark": "#0B1626",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"],
+            "mono": ["JetBrains Mono", "monospace"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    .grid-pattern {
+      background-image: linear-gradient(to right, rgba(240, 90, 25, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(240, 90, 25, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .glow-text {
+      text-shadow: 0 0 20px rgba(240, 90, 25, 0.6), 0 0 40px rgba(240, 90, 25, 0.2);
+    }
+
+    .glitch-effect {
+      position: relative;
+    }
+
+    /* Simulate a slight scanline/terminal effect */
+    .scanline {
+      width: 100%;
+      height: 2px;
+      background: rgba(240, 90, 25, 0.1);
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col overflow-hidden selection:bg-primary/30">
+  <!-- Background Grid Layer -->
+  <div class="fixed inset-0 grid-pattern pointer-events-none"></div>
+  <!-- Radial Gradient Overlay for Depth -->
+  <div
+    class="fixed inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_rgba(11,22,38,0.8)_100%)] pointer-events-none">
+  </div>
+  <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-6">
+    <!-- Branding Icon (Dimmed Lightning Bolt) -->
+    <div class="mb-8 opacity-30 text-primary">
+      <span class="material-symbols-outlined !text-6xl">
+        bolt
+      </span>
+    </div>
+    <!-- Main Error Display -->
+    <div class="text-center max-w-2xl">
+      <!-- Glitchy 404 -->
+      <h1
+        class="font-mono text-[120px] md:text-[180px] leading-none font-bold text-primary glow-text tracking-tighter glitch-effect">
+        404
+      </h1>
+      <!-- Subheadline -->
+      <h2 class="font-mono text-xl md:text-2xl tracking-[0.3em] text-primary/80 uppercase mb-6 mt-2">
+        SIGNAL LOST
+      </h2>
+      <!-- Description -->
+      <p class="text-slate-400 text-lg md:text-xl leading-relaxed mb-10 max-w-lg mx-auto">
+        The intelligence brief you're looking for has been decommissioned or never existed.
+      </p>
+      <!-- Action Button -->
+      <div class="flex justify-center">
+        <a class="group relative flex min-w-[240px] items-center justify-center overflow-hidden rounded-lg h-14 px-8 bg-primary text-white text-base font-bold leading-normal tracking-wide transition-transform hover:scale-105 active:scale-95 shadow-[0_0_25px_rgba(240,90,25,0.4)]"
+          href="/">
+          <span class="truncate uppercase">Return to Dashboard</span>
+          <span class="material-symbols-outlined ml-2 transition-transform group-hover:translate-x-1">
+            arrow_forward
+          </span>
+        </a>
+      </div>
+    </div>
+    <!-- Terminal Decorative Element (Bottom Center) -->
+    <div class="absolute bottom-12 w-full text-center px-4">
+      <div class="inline-flex items-center space-x-4 font-mono text-xs text-slate-600 tracking-widest uppercase">
+        <span class="flex items-center">
+          <span class="w-2 h-2 rounded-full bg-primary/40 mr-2 animate-pulse"></span>
+          ERROR_CODE: 404
+        </span>
+        <span class="hidden md:inline text-slate-700">|</span>
+        <span class="flex items-center">
+          <span class="material-symbols-outlined !text-sm mr-1">terminal</span>
+          TRENDWIRE TERMINAL v4.2.0
+        </span>
+      </div>
+    </div>
+  </main>
+  <!-- Visual Noise/Texture Overlay -->
+  <div
+    class="fixed inset-0 pointer-events-none opacity-[0.03] mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"
+    data-alt="Subtle noise texture for terminal aesthetic"></div>
+  <!-- Decorative Corner Brackets for Terminal Feel -->
+  <div class="fixed top-8 left-8 w-12 h-12 border-t-2 border-l-2 border-primary/20 pointer-events-none"></div>
+  <div class="fixed top-8 right-8 w-12 h-12 border-t-2 border-r-2 border-primary/20 pointer-events-none"></div>
+  <div class="fixed bottom-8 left-8 w-12 h-12 border-b-2 border-l-2 border-primary/20 pointer-events-none"></div>
+  <div class="fixed bottom-8 right-8 w-12 h-12 border-b-2 border-r-2 border-primary/20 pointer-events-none"></div>
+</body>
+
+</html>
