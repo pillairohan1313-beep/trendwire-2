@@ -26,45 +26,63 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ─── Resolve Article Data ───
-    let article = null;
-
-    // Try localStorage cache first (passed from dashboard)
-    const cachedData = localStorage.getItem('current_article_data');
-    if (cachedData) {
-        try {
-            const parsed = JSON.parse(cachedData);
-            if (parsed.id === articleId) {
-                article = parsed;
-            }
-        } catch (e) {
-            console.error("Failed to parse cached article data", e);
+    resolveArticle().then(article => {
+        if (!article) {
+            document.getElementById('article-content').innerHTML = `
+                <div class="text-center py-20">
+                    <span class="material-icons text-primary text-6xl mb-4">signal_wifi_off</span>
+                    <h2 class="text-2xl font-bold text-white mb-2">Signal Not Found</h2>
+                    <p class="text-slate-400 mb-6">This intelligence brief could not be located.</p>
+                    <a href="/" class="bg-primary hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition-all uppercase tracking-widest text-sm">Return to Dashboard</a>
+                </div>
+            `;
+            return;
         }
-    }
+        loadArticle(article);
+        setupActionButtons(article);
+    });
 
-    // Fallback to static FEED_DATA
-    if (!article && typeof FEED_DATA !== 'undefined') {
-        article = FEED_DATA.find(a => a.id === articleId);
-    }
+    async function resolveArticle() {
+        let article = null;
 
-    // Fallback to first article if no ID
-    if (!article && !articleId && typeof FEED_DATA !== 'undefined' && FEED_DATA.length > 0) {
-        article = FEED_DATA[0];
-    }
+        // 1. Try localStorage cache first (passed from dashboard click)
+        const cachedData = localStorage.getItem('current_article_data');
+        if (cachedData) {
+            try {
+                const parsed = JSON.parse(cachedData);
+                if (parsed.id === articleId) {
+                    article = parsed;
+                }
+            } catch (e) {
+                console.error("Failed to parse cached article data", e);
+            }
+        }
 
-    // 404 if nothing found
-    if (!article) {
-        document.getElementById('article-content').innerHTML = `
-            <div class="text-center py-20">
-                <span class="material-icons text-primary text-6xl mb-4">signal_wifi_off</span>
-                <h2 class="text-2xl font-bold text-white mb-2">Signal Not Found</h2>
-                <p class="text-slate-400 mb-6">This intelligence brief could not be located.</p>
-                <a href="/" class="bg-primary hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition-all uppercase tracking-widest text-sm">Return to Dashboard</a>
-            </div>
-        `;
-        return;
-    }
+        // 2. Try fetching from live API if no cache match
+        if (!article && articleId) {
+            try {
+                const response = await fetch('/api/news');
+                if (response.ok) {
+                    const data = await response.json();
+                    article = data.find(a => a.id === articleId);
+                }
+            } catch (e) {
+                console.error("Failed to fetch from API", e);
+            }
+        }
 
-    loadArticle(article);
+        // 3. Fallback to static FEED_DATA
+        if (!article && typeof FEED_DATA !== 'undefined') {
+            article = FEED_DATA.find(a => a.id === articleId);
+        }
+
+        // 4. Fallback to first article if no ID
+        if (!article && !articleId && typeof FEED_DATA !== 'undefined' && FEED_DATA.length > 0) {
+            article = FEED_DATA[0];
+        }
+
+        return article;
+    }
 
     // ─── Load Article ───
     function loadArticle(data) {
@@ -113,11 +131,24 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Content — use article content or generate fallback
+        // Content — use article content or generate fallback with external backlink
         const contentContainer = document.getElementById('article-content');
         if (contentContainer) {
             if (data.content && data.content !== 'undefined') {
-                contentContainer.innerHTML = data.content;
+                // Ensure the "Source Intelligence" backlink section is always present
+                let contentHtml = data.content;
+                if (data.link && !contentHtml.includes('View Original')) {
+                    contentHtml += `
+                        <div class="bg-[#1a2639] border border-[#2d3b55] p-4 rounded-lg my-6">
+                            <h4 class="text-sm font-mono text-slate-500 uppercase mb-2">Source Intelligence</h4>
+                            <div class="flex justify-between items-end">
+                                <span class="text-lg font-bold text-white">${escapeHtml(data.tag || 'NEWS')}</span>
+                                <a href="${data.link}" target="_blank" rel="noopener" class="text-[#F05A1A] text-sm hover:underline font-bold">View Original →</a>
+                            </div>
+                        </div>
+                    `;
+                }
+                contentContainer.innerHTML = contentHtml;
             } else {
                 // Generate a styled fallback from available data
                 contentContainer.innerHTML = `
@@ -133,27 +164,17 @@ document.addEventListener('DOMContentLoaded', () => {
                         <h4 class="text-sm font-mono text-slate-500 uppercase mb-2">Source Intelligence</h4>
                         <div class="flex justify-between items-end">
                             <span class="text-lg font-bold text-white">${escapeHtml(data.tag || 'NEWS')}</span>
-                            <a href="${data.link}" target="_blank" rel="noopener" class="text-[#f05a1a] text-sm hover:underline">View Original →</a>
+                            <a href="${data.link}" target="_blank" rel="noopener" class="text-[#F05A1A] text-sm hover:underline font-bold">View Original →</a>
                         </div>
                     </div>` : ''}
                 `;
             }
         }
 
-        // Related Signals — populate with other articles from FEED_DATA
+        // Related Signals — fetch from API or fallback to FEED_DATA
         const relatedGrid = document.getElementById('related-signals');
-        if (relatedGrid && typeof FEED_DATA !== 'undefined') {
-            const related = FEED_DATA
-                .filter(a => a.id !== data.id)
-                .slice(0, 4);
-
-            relatedGrid.innerHTML = related.map(r => `
-                <a href="/article/${r.id}" class="block bg-[#1a2639]/60 border border-[#2d3b55] rounded-lg p-4 hover:border-[#f05a1a]/40 transition-all group">
-                    <span class="text-[10px] font-mono text-[#f05a1a] uppercase tracking-wider">${r.tag}</span>
-                    <h3 class="text-sm font-bold text-white mt-1 group-hover:text-[#f05a1a] transition-colors leading-snug">${escapeHtml(r.headline)}</h3>
-                    <span class="text-[10px] font-mono text-slate-500 mt-2 block">${r.readTime || '3 min read'}</span>
-                </a>
-            `).join('');
+        if (relatedGrid) {
+            populateRelatedSignals(relatedGrid, data);
         }
 
         // Update Page Title
@@ -173,39 +194,76 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // ─── Action Buttons ───
-    const shareBriefBtn = document.getElementById('btn-share-brief');
-    if (shareBriefBtn) {
-        shareBriefBtn.addEventListener('click', () => {
-            const url = window.location.href;
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(url).then(() => {
-                    showToast('Link copied to clipboard');
-                }).catch(() => {
-                    showToast('Copy failed — use browser share');
-                });
-            } else if (navigator.share) {
-                navigator.share({ title: document.title, url: url });
-            } else {
-                showToast('Share not supported in this browser');
+    async function populateRelatedSignals(container, currentArticle) {
+        let allArticles = [];
+
+        // Try API first
+        try {
+            const response = await fetch('/api/news');
+            if (response.ok) {
+                allArticles = await response.json();
             }
-        });
+        } catch (e) {
+            // Fallback to FEED_DATA
+        }
+
+        if (allArticles.length === 0 && typeof FEED_DATA !== 'undefined') {
+            allArticles = FEED_DATA;
+        }
+
+        const related = allArticles
+            .filter(a => a.id !== currentArticle.id)
+            .slice(0, 4);
+
+        container.innerHTML = related.map(r => `
+            <a href="/article/${r.id}" class="block bg-[#1a2639]/60 border border-[#2d3b55] rounded-lg p-4 hover:border-[#F05A1A]/40 transition-all group">
+                <span class="text-[10px] font-mono text-[#F05A1A] uppercase tracking-wider">${r.tag}</span>
+                <h3 class="text-sm font-bold text-white mt-1 group-hover:text-[#F05A1A] transition-colors leading-snug">${escapeHtml(r.headline)}</h3>
+                <span class="text-[10px] font-mono text-slate-500 mt-2 block">${r.readTime || '3 min read'}</span>
+            </a>
+        `).join('');
     }
 
-    const saveVaultBtn = document.getElementById('btn-save-vault');
-    if (saveVaultBtn) {
-        saveVaultBtn.addEventListener('click', () => {
-            if (!article) return;
+    // ─── Action Buttons ───
+    function setupActionButtons(article) {
+        const shareBriefBtn = document.getElementById('btn-share-brief');
+        if (shareBriefBtn) {
+            shareBriefBtn.addEventListener('click', () => {
+                const url = window.location.href;
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(url).then(() => {
+                        showToast('Link copied to clipboard');
+                    }).catch(() => {
+                        showToast('Copy failed — use browser share');
+                    });
+                } else if (navigator.share) {
+                    navigator.share({ title: document.title, url: url });
+                } else {
+                    showToast('Share not supported in this browser');
+                }
+            });
+        }
+
+        const saveVaultBtn = document.getElementById('btn-save-vault');
+        if (saveVaultBtn) {
+            // Check if already saved
             const vault = JSON.parse(localStorage.getItem('trendwire_vault') || '[]');
             if (vault.find(v => v.id === article.id)) {
-                showToast('Already saved to Vault');
-                return;
+                saveVaultBtn.innerHTML = '<span class="material-icons text-sm">bookmark</span><span class="text-xs uppercase tracking-widest">Saved ✓</span>';
             }
-            vault.push({ id: article.id, headline: article.headline, tag: article.tag, savedAt: Date.now() });
-            localStorage.setItem('trendwire_vault', JSON.stringify(vault));
-            saveVaultBtn.innerHTML = '<span class="material-icons text-sm">bookmark</span><span class="text-xs uppercase tracking-widest">Saved ✓</span>';
-            showToast('Saved to Vault');
-        });
+
+            saveVaultBtn.addEventListener('click', () => {
+                const vault = JSON.parse(localStorage.getItem('trendwire_vault') || '[]');
+                if (vault.find(v => v.id === article.id)) {
+                    showToast('Already saved to Vault');
+                    return;
+                }
+                vault.push({ id: article.id, headline: article.headline, tag: article.tag, image: article.image, savedAt: Date.now() });
+                localStorage.setItem('trendwire_vault', JSON.stringify(vault));
+                saveVaultBtn.innerHTML = '<span class="material-icons text-sm">bookmark</span><span class="text-xs uppercase tracking-widest">Saved ✓</span>';
+                showToast('Saved to Vault');
+            });
+        }
     }
 
     // ─── Paywall Functions ───
@@ -217,14 +275,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.getElementById('btn-unlock-pro')?.addEventListener('click', () => {
-        window.location.href = '/pro.html';
+        window.location.href = '/pro';
     });
 
     // ─── Hamburger Toggle (Mobile) ───
     const hamburgerBtn = document.getElementById('hamburger-btn-article');
     const sidebar = document.getElementById('sidebar-article');
     if (hamburgerBtn && sidebar) {
-        hamburgerBtn.addEventListener('click', () => {
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             sidebar.classList.toggle('sidebar-open');
         });
         document.addEventListener('click', (e) => {

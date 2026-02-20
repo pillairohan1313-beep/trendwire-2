@@ -23,7 +23,7 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#f05a19",
+                        "primary": "#F05A1A",
                         "background-light": "#f8f6f6",
                         "background-dark": "#0b1626",
                         "surface": "#1a2639",
@@ -129,8 +129,10 @@
         <!-- Top Status Bar -->
         <div
             class="h-12 w-full flex items-center justify-between px-4 md:px-6 border-b border-border-muted/50 bg-background-dark/40">
-            <span class="font-mono text-[10px] tracking-widest text-slate-500 uppercase">Trendwire Terminal
-                v4.2.0</span>
+            <a href="/" class="flex items-center gap-2 text-slate-400 hover:text-primary transition-colors">
+                <span class="material-icons text-sm">arrow_back</span>
+                <span class="font-mono text-[10px] tracking-widest uppercase">Dashboard</span>
+            </a>
             <div class="flex items-center gap-4">
                 <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
                 <span class="font-mono text-[10px] text-slate-500">LIVE FEED ACTIVE</span>

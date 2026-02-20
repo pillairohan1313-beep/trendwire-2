@@ -1,12 +1,26 @@
 {
   "rewrites": [
-    { "source": "/article/:id", "destination": "/article.html" }
+    {
+      "source": "/article/:id",
+      "destination": "/article.html"
+    },
+    {
+      "source": "/pro",
+      "destination": "/pro.html"
+    },
+    {
+      "source": "/vault",
+      "destination": "/vault.html"
+    }
   ],
   "headers": [
     {
       "source": "/api/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "s-maxage=60, stale-while-revalidate=300" }
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=60, stale-while-revalidate=300"
+        }
       ]
     }
   ]

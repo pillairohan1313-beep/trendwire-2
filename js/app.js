@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const hamburgerBtn = document.getElementById('hamburger-btn');
     const sidebar = document.getElementById('sidebar');
     const tuneBtn = document.getElementById('tune-btn');
+    const feedStatus = document.getElementById('feed-status');
 
     // Config
     const ARTICLE_LIMIT = 5;
@@ -17,13 +18,28 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentFilter = 'ALL';
     let feedCache = []; // Cache feed data for filtering
 
-    // ─── Filter Logic ───
-    const FILTER_MAP = {
-        'ALL': null,
-        'TOOLS': ['AI RESEARCH', 'GOOGLE AI', 'DEV'],
-        'REPORTS': ['BUSINESS', 'STARTUPS', 'TECH']
-    };
+    // ─── Category Mapping ───
+    // Tags returned by the API and what filter tab they belong to
+    const TOOLS_TAGS = ['AI TOOLS', 'AI RESEARCH', 'GOOGLE AI', 'DEV'];
+    const REPORTS_TAGS = ['BUSINESS', 'STARTUPS', 'TECH', 'SEO', 'ECOMMERCE', 'HARDWARE'];
 
+    function getContentType(tag) {
+        if (!tag) return 'article';
+        const upper = tag.toUpperCase();
+        if (TOOLS_TAGS.includes(upper)) return 'tool';
+        if (REPORTS_TAGS.includes(upper)) return 'report';
+        return 'article';
+    }
+
+    function matchesFilter(tag) {
+        if (currentFilter === 'ALL') return true;
+        const type = getContentType(tag);
+        if (currentFilter === 'TOOLS') return type === 'tool';
+        if (currentFilter === 'REPORTS') return type === 'report';
+        return true;
+    }
+
+    // ─── Filter Logic ───
     filterBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             currentFilter = btn.dataset.filter;
@@ -41,7 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ─── Hamburger Toggle (Mobile) ───
     if (hamburgerBtn && sidebar) {
-        hamburgerBtn.addEventListener('click', () => {
+        hamburgerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             sidebar.classList.toggle('sidebar-open');
         });
         // Close sidebar when clicking outside on mobile
@@ -70,12 +87,20 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (target === 'sensors') {
                 showToast('Sensors panel coming in v1.1');
             } else if (target === 'insights') {
-                showToast('Pro Insights — Unlock with Pro subscription');
+                window.location.href = '/pro';
             } else if (target === 'storage') {
-                showToast('Saved articles (Vault) coming in v1.1');
+                window.location.href = '/vault';
             }
         });
     });
+
+    // ─── Update Feed Status ───
+    function updateFeedStatus(count) {
+        if (!feedStatus) return;
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        feedStatus.textContent = `UPDATED ${timeStr} • ${count} SIGNALS DETECTED`;
+    }
 
     // ─── Render Feed ───
     async function renderFeed(showLoader = true) {
@@ -84,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (showLoader && feedCache.length === 0) {
             feedGrid.innerHTML = `
                 <div class="col-span-full h-64 flex flex-col items-center justify-center space-y-4 animate-pulse">
-                    <div class="w-12 h-12 border-4 border-[#f05a1a] border-t-transparent rounded-full animate-spin"></div>
+                    <div class="w-12 h-12 border-4 border-[#F05A1A] border-t-transparent rounded-full animate-spin"></div>
                     <p class="text-slate-400 font-mono text-sm tracking-widest uppercase">Initializing Neural Feed...</p>
                 </div>
             `;
@@ -95,11 +120,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
             feedCache = data;
+            updateFeedStatus(data.length);
             renderCards(data);
 
         } catch (error) {
             console.error("Failed to fetch news:", error);
-            // If we have cached data, keep showing it
+            // Fallback to static FEED_DATA if API fails
+            if (feedCache.length === 0 && typeof FEED_DATA !== 'undefined' && FEED_DATA.length > 0) {
+                feedCache = FEED_DATA;
+                updateFeedStatus(FEED_DATA.length);
+                renderCards(FEED_DATA);
+                showToast('Live feed unavailable — showing cached signals');
+                return;
+            }
             if (feedCache.length > 0) {
                 showToast('Feed refresh failed — showing cached data');
                 return;
@@ -118,12 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!feedGrid) return;
 
         // Apply filter
-        let filteredData = data;
-        if (currentFilter !== 'ALL' && FILTER_MAP[currentFilter]) {
-            filteredData = data.filter(item =>
-                FILTER_MAP[currentFilter].includes(item.tag)
-            );
-        }
+        let filteredData = data.filter(item => matchesFilter(item.tag));
 
         if (filteredData.length === 0) {
             feedGrid.innerHTML = `
@@ -143,9 +171,31 @@ document.addEventListener('DOMContentLoaded', () => {
             const delayClass = `delay-${Math.min(index * 100, 1000)}`;
             const timeAgo = formatTimeAgo(item.timestamp);
             const readTime = item.readTime || estimateReadTime(item.headline);
+            const contentType = getContentType(item.tag);
+
+            // Visual distinction per content type
+            let borderStyle = 'border-border-navy';
+            let ctaText = 'Read Brief';
+            let ctaIcon = 'arrow_forward';
+            let typeBadge = '';
+            let accentBorder = '';
+
+            if (contentType === 'tool') {
+                borderStyle = 'border-[#F05A1A]/30';
+                ctaText = 'Open Tool';
+                ctaIcon = 'open_in_new';
+                typeBadge = `<span class="bg-[#F05A1A]/20 text-[#F05A1A] text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider ml-2">TOOL</span>`;
+                accentBorder = 'border-l-2 border-l-[#F05A1A]';
+            } else if (contentType === 'report') {
+                borderStyle = 'border-blue-500/30';
+                ctaText = 'Full Analysis';
+                ctaIcon = 'analytics';
+                typeBadge = `<span class="bg-blue-500/20 text-blue-400 text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider ml-2">REPORT</span>`;
+                accentBorder = 'border-l-2 border-l-blue-500';
+            }
 
             return `
-                <div class="${colSpan} relative group cursor-pointer overflow-hidden rounded-xl border border-border-navy h-full min-h-[300px] animate-fade-up ${delayClass}" style="animation-fill-mode: forwards;" onclick="${clickHandler}">
+                <div class="${colSpan} relative group cursor-pointer overflow-hidden rounded-xl border ${borderStyle} ${accentBorder} h-full min-h-[300px] animate-fade-up ${delayClass}" style="animation-fill-mode: forwards;" onclick="${clickHandler}">
                 ${bgBlur}
                 
                 <!-- Background Image -->
@@ -155,14 +205,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent opacity-90 transition-opacity duration-300 group-hover:opacity-80"></div>
                 
                 <!-- Border Glow Effect -->
-                <div class="absolute inset-0 border border-transparent group-hover:border-[#f05a1a]/50 rounded-xl transition-colors duration-300 pointer-events-none z-20"></div>
+                <div class="absolute inset-0 border border-transparent group-hover:border-[#F05A1A]/50 rounded-xl transition-colors duration-300 pointer-events-none z-20"></div>
 
                 <!-- Content Container -->
                 <div class="absolute inset-0 p-5 flex flex-col justify-between z-10">
                     
                     <!-- Top Section: Tag & Impact -->
                     <div class="flex justify-between items-start">
-                        <span class="bg-[#f05a1a] text-white text-[10px] font-bold px-2.5 py-1 rounded tracking-wider uppercase shadow-sm">${item.tag}</span>
+                        <div class="flex items-center">
+                            <span class="bg-[#F05A1A] text-white text-[10px] font-bold px-2.5 py-1 rounded tracking-wider uppercase shadow-sm">${item.tag}</span>
+                            ${typeBadge}
+                        </div>
                         
                         <div class="flex flex-col items-end">
                             <span class="text-[9px] text-slate-400 font-mono tracking-widest uppercase mb-0.5">Impact</span>
@@ -173,7 +226,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <!-- Bottom Section: Headlines & Metadata -->
                     <div class="space-y-3">
                         <div class="space-y-1">
-                            <h2 class="text-base md:text-lg font-bold leading-snug text-white group-hover:text-[#f05a1a] transition-colors duration-300 drop-shadow-sm">${escapeHtml(item.headline)}</h2>
+                            <h2 class="text-base md:text-lg font-bold leading-snug text-white group-hover:text-[#F05A1A] transition-colors duration-300 drop-shadow-sm">${escapeHtml(item.headline)}</h2>
                             <div class="flex items-center gap-3 text-[11px] font-mono text-slate-400 uppercase tracking-wide">
                                 <span>${timeAgo}</span>
                                 <span class="w-1 h-1 bg-slate-500 rounded-full"></span>
@@ -188,7 +241,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <div class="w-5 h-5 rounded-full border border-white/20 bg-slate-700 flex items-center justify-center text-[7px] text-slate-300 font-bold">MK</div>
                             </div>
                             <button class="text-[10px] font-bold text-slate-300 group-hover:text-white uppercase tracking-wider flex items-center gap-1.5 transition-colors">
-                                Read Brief <span class="material-icons text-[12px] group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
+                                ${ctaText} <span class="material-icons text-[12px] group-hover:translate-x-0.5 transition-transform">${ctaIcon}</span>
                             </button>
                         </div>
                     </div>
@@ -289,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (unlockBtn) {
         unlockBtn.addEventListener('click', () => {
-            window.location.href = '/pro.html';
+            window.location.href = '/pro';
         });
     }
 

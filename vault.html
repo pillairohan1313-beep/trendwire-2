@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Trendwire Vault — Saved Signals</title>
+    <meta name="description" content="Your saved intelligence signals — powered by Trendwire." />
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#F05A1A",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#0b1626",
+                        "surface": "#1a2639",
+                        "border-navy": "#2d3b55",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .grid-bg {
+            background-image: linear-gradient(to right, rgba(240, 90, 26, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(240, 90, 26, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark font-display text-slate-200 antialiased min-h-screen flex flex-col">
+    <div class="fixed inset-0 grid-bg pointer-events-none"></div>
+
+    <div class="relative flex flex-col min-h-screen w-full">
+        <!-- Header -->
+        <header
+            class="w-full max-w-5xl mx-auto px-6 py-6 flex items-center justify-between border-b border-border-navy/50">
+            <div class="flex items-center gap-3">
+                <a href="/" class="text-primary">
+                    <span class="material-icons text-3xl">bolt</span>
+                </a>
+                <h2 class="text-xl font-bold tracking-tight uppercase">Vault</h2>
+                <span
+                    class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">Saved</span>
+            </div>
+            <a class="group flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-primary transition-colors uppercase tracking-widest"
+                href="/">
+                <span class="material-icons text-lg">dashboard</span>
+                <span class="hidden sm:inline">Dashboard</span>
+            </a>
+        </header>
+
+        <!-- Main Vault Content -->
+        <main class="flex-1 w-full max-w-5xl mx-auto px-6 py-8">
+            <!-- Vault Stats -->
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <p class="text-[10px] font-mono text-slate-500 uppercase tracking-widest" id="vault-count">0 SIGNALS
+                        SAVED</p>
+                </div>
+                <button id="clear-vault"
+                    class="text-[10px] font-mono text-red-400 hover:text-red-300 uppercase tracking-widest transition-colors flex items-center gap-1">
+                    <span class="material-icons text-[14px]">delete_outline</span>
+                    Clear Vault
+                </button>
+            </div>
+
+            <!-- Vault Grid -->
+            <div id="vault-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- JS injects here -->
+            </div>
+
+            <!-- Empty State -->
+            <div id="vault-empty" class="hidden flex flex-col items-center justify-center py-24 text-center">
+                <div
+                    class="w-20 h-20 rounded-full bg-surface border border-border-navy flex items-center justify-center mb-6">
+                    <span class="material-icons text-4xl text-slate-500">bookmark_border</span>
+                </div>
+                <h2 class="text-xl font-bold text-white mb-2">No Saved Signals</h2>
+                <p class="text-slate-400 text-sm max-w-sm mb-6">
+                    Save intelligence briefs from the dashboard to build your personal vault.
+                </p>
+                <a href="/"
+                    class="bg-primary hover:bg-primary/90 text-white font-bold py-3 px-6 rounded-lg transition-all uppercase tracking-widest text-sm flex items-center gap-2">
+                    <span class="material-icons text-sm">dashboard</span>
+                    Browse Signals
+                </a>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer
+            class="w-full max-w-5xl mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-6 border-t border-border-navy/30 mt-auto">
+            <div class="flex items-center gap-4">
+                <span class="text-[10px] font-mono text-slate-600 uppercase tracking-tighter">System Version</span>
+                <span class="text-[10px] font-mono text-primary/60">v4.2.0-STABLE</span>
+            </div>
+            <div class="flex gap-8">
+                <a class="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors"
+                    href="#">Privacy</a>
+                <a class="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors"
+                    href="#">Terms</a>
+                <a class="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors"
+                    href="/pro">Pro</a>
+            </div>
+            <p class="text-[10px] font-mono text-slate-600">© 2026 TRENDWIRE_LABS</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const vaultGrid = document.getElementById('vault-grid');
+            const vaultEmpty = document.getElementById('vault-empty');
+            const vaultCount = document.getElementById('vault-count');
+            const clearVaultBtn = document.getElementById('clear-vault');
+
+            function renderVault() {
+                const vault = JSON.parse(localStorage.getItem('trendwire_vault') || '[]');
+
+                vaultCount.textContent = `${vault.length} SIGNAL${vault.length !== 1 ? 'S' : ''} SAVED`;
+
+                if (vault.length === 0) {
+                    vaultGrid.classList.add('hidden');
+                    vaultEmpty.classList.remove('hidden');
+                    return;
+                }
+
+                vaultGrid.classList.remove('hidden');
+                vaultEmpty.classList.add('hidden');
+
+                vaultGrid.innerHTML = vault.map((item, index) => {
+                    const savedDate = new Date(item.savedAt);
+                    const dateStr = savedDate.toLocaleDateString('en-US', { month: 'short', day: '2-digit' }).toUpperCase();
+
+                    return `
+                        <div class="group relative bg-surface/60 border border-border-navy rounded-xl p-5 hover:border-primary/40 transition-all cursor-pointer animate-fade-up"
+                            style="animation-delay: ${index * 80}ms; animation-fill-mode: forwards;">
+                            
+                            ${item.image ? `
+                            <div class="w-full h-32 rounded-lg overflow-hidden mb-4 border border-border-navy/50">
+                                <img src="${item.image}" alt="" class="w-full h-full object-cover opacity-70 group-hover:opacity-90 transition-opacity">
+                            </div>` : ''}
+
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="bg-primary/20 text-primary text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">${item.tag || 'SIGNAL'}</span>
+                                <span class="text-[9px] font-mono text-slate-500 ml-auto">${dateStr}</span>
+                            </div>
+
+                            <a href="/article/${item.id}" class="block">
+                                <h3 class="text-sm font-bold text-white group-hover:text-primary transition-colors leading-snug mb-3">${escapeHtml(item.headline)}</h3>
+                            </a>
+
+                            <div class="flex items-center justify-between">
+                                <a href="/article/${item.id}" class="text-[10px] font-bold text-slate-400 group-hover:text-white uppercase tracking-wider flex items-center gap-1 transition-colors">
+                                    Read Brief <span class="material-icons text-[12px]">arrow_forward</span>
+                                </a>
+                                <button onclick="removeFromVault('${item.id}')" class="text-slate-500 hover:text-red-400 transition-colors" title="Remove from vault">
+                                    <span class="material-icons text-[16px]">close</span>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            window.removeFromVault = (id) => {
+                let vault = JSON.parse(localStorage.getItem('trendwire_vault') || '[]');
+                vault = vault.filter(v => v.id !== id);
+                localStorage.setItem('trendwire_vault', JSON.stringify(vault));
+                renderVault();
+            };
+
+            clearVaultBtn.addEventListener('click', () => {
+                if (confirm('Clear all saved signals?')) {
+                    localStorage.setItem('trendwire_vault', '[]');
+                    renderVault();
+                }
+            });
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            renderVault();
+        });
+    </script>
+</body>
+
+</html>

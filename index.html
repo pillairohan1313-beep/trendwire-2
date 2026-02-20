@@ -25,7 +25,7 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#f05a19",
+                        "primary": "#F05A1A",
                         "background-light": "#f8f6f6",
                         "background-dark": "#0b1626",
                         "surface": "#1a2639",
@@ -97,8 +97,8 @@
         }
 
         .card-glow:hover {
-            border-color: #f05a19;
-            box-shadow: 0 0 15px rgba(240, 90, 25, 0.1);
+            border-color: #F05A1A;
+            box-shadow: 0 0 15px rgba(240, 90, 26, 0.1);
         }
 
         ::-webkit-scrollbar {
@@ -157,7 +157,7 @@
     </button>
 
     <!-- Sidebar -->
-    <aside id="sidebar" class="glass-sidebar w-16 md:w-20 flex flex-col items-center py-6 z-50 hidden md:flex">
+    <aside id="sidebar" class="glass-sidebar w-16 md:w-20 flex flex-col items-center py-6 z-50">
         <div class="mb-10 text-primary">
             <span class="material-icons text-3xl">bolt</span>
         </div>
@@ -260,7 +260,7 @@
                 <div class="flex justify-between items-end">
                     <div>
                         <h1 class="text-xl font-bold tracking-tight text-white uppercase">Intelligence Feed</h1>
-                        <p class="text-[10px] text-slate-500 font-mono">UPDATED 2m AGO • 144 SIGNALS DETECTED</p>
+                        <p class="text-[10px] text-slate-500 font-mono" id="feed-status">INITIALIZING FEED...</p>
                     </div>
                     <button id="tune-btn" class="bg-primary/10 text-primary border border-primary/20 p-2 rounded"
                         title="Filter Settings">
@@ -284,6 +284,24 @@
             <!-- Bottom Spacer -->
             <div class="h-10"></div>
         </div>
+
+        <!-- Footer -->
+        <footer
+            class="border-t border-border-navy bg-surface/30 px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+            <div class="flex items-center gap-4">
+                <span class="text-[10px] font-mono text-slate-600 uppercase tracking-tighter">System Version</span>
+                <span class="text-[10px] font-mono text-primary/60">v4.2.0-STABLE</span>
+            </div>
+            <div class="flex gap-6">
+                <a class="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors"
+                    href="#">Privacy</a>
+                <a class="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors"
+                    href="#">Terms</a>
+                <a class="text-[10px] font-bold text-slate-500 hover:text-white uppercase tracking-widest transition-colors"
+                    href="/pro">Pro</a>
+            </div>
+            <p class="text-[10px] font-mono text-slate-600">© 2026 TRENDWIRE_LABS</p>
+        </footer>
     </main>
 
     <!-- Paywall Overlay -->
